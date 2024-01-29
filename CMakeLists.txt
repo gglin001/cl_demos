@@ -14,12 +14,16 @@ option(WITH_OPENCL_SDK "WITH_OPENCL_SDK" OFF)
 # FetchContent
 include(fetch.cmake)
 
-find_package(OpenCL REQUIRED)
 if(WITH_OPENCL_SDK)
   find_package(OpenCLHeaders REQUIRED)
   find_package(OpenCLICDLoader REQUIRED)
   find_package(OpenCLHeadersCpp REQUIRED)
 endif()
+
+find_package(OpenCL REQUIRED)
+message("OpenCL_VERSION_STRING: ${OpenCL_VERSION_STRING}")
+message("OpenCL_INCLUDE_DIRS: ${OpenCL_INCLUDE_DIRS}")
+message("OpenCL_LIBRARIES: ${OpenCL_LIBRARIES}")
 
 find_package(spdlog REQUIRED)
 
