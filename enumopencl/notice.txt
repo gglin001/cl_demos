@@ -1,0 +1,2 @@
+copy from
+https://github.com/KhronosGroup/OpenCL-SDK/tree/main/samples

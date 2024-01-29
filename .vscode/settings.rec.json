@@ -1,0 +1,13 @@
+{
+    "terminal.integrated.env.linux": {
+        "EXT_PATH": "${workspaceFolder}/build/bin",
+    },
+    "terminal.integrated.env.osx": {
+        "EXT_PATH": "${workspaceFolder}/build/bin",
+    },
+    "cmake.configureSettings": {
+        "CMAKE_INSTALL_PREFIX": "${workspaceFolder}/build/install",
+        "CMAKE_VERBOSE_MAKEFILE": false,
+        "WITH_OPENCL_SDK": false,
+    },
+}
