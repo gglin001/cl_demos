@@ -8,6 +8,7 @@
             "type": "lldb",
             "request": "launch",
             "name": "Launch",
+            // "program": "${command:cmake.getLaunchTargetPath}",
             "program": "${command:cmake.selectLaunchTarget}",
             "args": [],
             "cwd": "${workspaceFolder}"
