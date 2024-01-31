@@ -5,13 +5,5 @@
     "terminal.integrated.env.osx": {
         "EXT_PATH": "${workspaceFolder}/build/bin",
     },
-    "cmake.configureSettings": {
-        "CMAKE_INSTALL_PREFIX": "${workspaceFolder}/build/install",
-        "CMAKE_RUNTIME_OUTPUT_DIRECTORY": "${workspaceFolder}/build/bin",
-        // "CMAKE_VERBOSE_MAKEFILE": true,
-        "CMAKE_VERBOSE_MAKEFILE": false,
-        "WITH_OPENCL_SDK": true,
-        "WITH_SYSTEM_LIBS": true,
-        "WITH_OPENCL_CTS": true,
-    },
+    "cmake.useCMakePresets": "always",
 }

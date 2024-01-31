@@ -4,3 +4,9 @@ micromamba install -y pocl
 micromamba install -y khronos-opencl-icd-loader clhpp
 # for linux
 micromamba install -y ocl-icd clhpp
+
+# config
+cmake --preset pocl
+
+# build
+cmake --build build --target all
