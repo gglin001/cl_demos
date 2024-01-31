@@ -38,5 +38,6 @@ if(WITH_OPENCL_SDK)
     GIT_TAG v2023.12.14
     GIT_SHALLOW TRUE
     OVERRIDE_FIND_PACKAGE)
+  set(BUILD_EXAMPLES OFF)
   FetchContent_MakeAvailable(OpenCLHeadersCpp)
 endif()
