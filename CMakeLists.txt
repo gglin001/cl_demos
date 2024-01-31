@@ -9,6 +9,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/)
 
 option(WITH_OPENCL_SDK "WITH_OPENCL_SDK" OFF)
 option(WITH_SYSTEM_LIBS "WITH_SYSTEM_LIBS" OFF)
+option(WITH_OPENCL_CTS "WITH_OPENCL_CTS" OFF)
 
 # TODO: add a opencl (cpu)runtime src to build
 
@@ -19,12 +20,12 @@ if(WITH_OPENCL_SDK)
   find_package(OpenCLHeaders REQUIRED)
   find_package(OpenCLICDLoader REQUIRED)
   find_package(OpenCLHeadersCpp REQUIRED)
+else()
+  find_package(OpenCL REQUIRED)
 endif()
-
-find_package(OpenCL REQUIRED)
 message("OpenCL_VERSION_STRING: ${OpenCL_VERSION_STRING}")
-message("OpenCL_INCLUDE_DIRS: ${OpenCL_INCLUDE_DIRS}")
-message("OpenCL_LIBRARIES: ${OpenCL_LIBRARIES}")
+message("OpenCL_INCLUDE_DIR: ${OpenCL_INCLUDE_DIR}")
+message("OpenCL_LIBRARY: ${OpenCL_LIBRARY}")
 
 find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
 message("Python3_EXECUTABLE: ${Python3_EXECUTABLE}")
@@ -32,3 +33,15 @@ message("Python3_INCLUDE_DIRS: ${Python3_INCLUDE_DIRS}")
 message("Python3_LIBRARIES: ${Python3_LIBRARIES}")
 
 add_subdirectory(enumopencl)
+
+# TODO: only tested for `WITH_OPENCL_SDK=ON`
+if(WITH_OPENCL_CTS)
+  execute_process(COMMAND git apply ${CMAKE_SOURCE_DIR}/OpenCL-CTS.patch -q
+                  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/OpenCL-CTS)
+  get_target_property(CL_LIB_DIR OpenCL::OpenCL LOCATION)
+  get_filename_component(CL_LIB_DIR ${CL_LIB_DIR} DIRECTORY)
+  get_filename_component(CL_LIB_DIR ${CL_LIB_DIR} DIRECTORY)
+  set(CL_INCLUDE_DIR "${CL_LIB_DIR}/include")
+  message("CL_INCLUDE_DIR: ${CL_INCLUDE_DIR}")
+  add_subdirectory(OpenCL-CTS)
+endif()

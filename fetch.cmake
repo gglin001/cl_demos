@@ -39,5 +39,6 @@ if(WITH_OPENCL_SDK)
     GIT_SHALLOW TRUE
     OVERRIDE_FIND_PACKAGE)
   set(BUILD_EXAMPLES OFF)
+  set(BUILD_DOCS OFF)
   FetchContent_MakeAvailable(OpenCLHeadersCpp)
 endif()

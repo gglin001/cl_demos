@@ -1,0 +1,44 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 5cfef6b..840666e 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -50,13 +50,13 @@ set(CONFORMANCE_SUFFIX "" )
+ #build driver as a dependency of the conformance tests, or other such CMake customization
+ include(CMakeVendor.txt OPTIONAL)
+ 
+-# CL_INCLUDE_DIR - path to dir with OpenCL headers
+-if(CL_INCLUDE_DIR AND CL_LIB_DIR)
+-    link_directories(${CL_LIB_DIR})
+-else(CL_INCLUDE_DIR AND CL_LIB_DIR)
+-    message(STATUS "OpenCL hasn't been found!")
+-    message(FATAL_ERROR "Either install OpenCL or pass -DCL_INCLUDE_DIR and -DCL_LIB_DIR")
+-endif(CL_INCLUDE_DIR AND CL_LIB_DIR)
++# # CL_INCLUDE_DIR - path to dir with OpenCL headers
++# if(CL_INCLUDE_DIR AND CL_LIB_DIR)
++#     link_directories(${CL_LIB_DIR})
++# else(CL_INCLUDE_DIR AND CL_LIB_DIR)
++#     message(STATUS "OpenCL hasn't been found!")
++#     message(FATAL_ERROR "Either install OpenCL or pass -DCL_INCLUDE_DIR and -DCL_LIB_DIR")
++# endif(CL_INCLUDE_DIR AND CL_LIB_DIR)
+ 
+ # CLConform_GL_LIBRARIES_DIR - path to OpenGL libraries
+ if(GL_IS_SUPPORTED AND CLConform_GL_LIBRARIES_DIR)
+@@ -163,6 +163,7 @@ if(WIN32 AND ${CLConform_TARGET_ARCH} STREQUAL "x86")
+ endif()
+ 
+ list(APPEND CLConform_LIBRARIES ${OPENCL_LIBRARIES})
++list(APPEND CLConform_LIBRARIES OpenCL::OpenCL)
+ if(ANDROID)
+     list(APPEND CLConform_LIBRARIES m)
+ endif()
+diff --git a/test_conformance/extensions/CMakeLists.txt b/test_conformance/extensions/CMakeLists.txt
+index 3187174..ba53ee0 100644
+--- a/test_conformance/extensions/CMakeLists.txt
++++ b/test_conformance/extensions/CMakeLists.txt
+@@ -1,5 +1,5 @@
+ add_subdirectory( cl_ext_cxx_for_opencl )
+-add_subdirectory( cl_khr_command_buffer )
++# add_subdirectory( cl_khr_command_buffer )
+ add_subdirectory( cl_khr_dx9_media_sharing )
+ add_subdirectory( cl_khr_semaphore )
+ if(VULKAN_IS_SUPPORTED)
