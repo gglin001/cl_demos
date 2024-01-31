@@ -8,6 +8,5 @@ endif()
 # TODO: make it works on macos
 if(WITH_OPENCL_SDK)
   add_executable(enumopenclcpp main.cpp)
-  target_link_libraries(enumopenclcpp OpenCL::Headers OpenCL::OpenCL
-                        OpenCL::HeadersCpp)
+  target_link_libraries(enumopenclcpp OpenCL::OpenCL OpenCL::HeadersCpp)
 endif()

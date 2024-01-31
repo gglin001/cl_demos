@@ -3,15 +3,7 @@ set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
 include(FetchContent)
 set(FETCHCONTENT_QUIET FALSE)
 
-# spdlog
-FetchContent_Declare(
-  spdlog
-  SYSTEM
-  GIT_REPOSITORY https://github.com/gabime/spdlog
-  GIT_TAG v1.13.0
-  GIT_SHALLOW TRUE
-  OVERRIDE_FIND_PACKAGE)
-FetchContent_MakeAvailable(spdlog)
+# TODO: use https://github.com/KhronosGroup/OpenCL-SDK
 
 if(WITH_OPENCL_SDK)
   # OpenCLHeaders
@@ -23,7 +15,9 @@ if(WITH_OPENCL_SDK)
     GIT_SHALLOW TRUE
     OVERRIDE_FIND_PACKAGE)
   FetchContent_MakeAvailable(OpenCLHeaders)
+endif()
 
+if((WITH_OPENCL_SDK) AND (NOT WITH_SYSTEM_LIBS))
   # OpenCLICDLoader
   FetchContent_Declare(
     OpenCLICDLoader
@@ -33,8 +27,10 @@ if(WITH_OPENCL_SDK)
     GIT_SHALLOW TRUE
     OVERRIDE_FIND_PACKAGE)
   FetchContent_MakeAvailable(OpenCLICDLoader)
+endif()
 
-  # TODO: use https://github.com/KhronosGroup/OpenCL-SDK OpenCL-CLHPP
+if(WITH_OPENCL_SDK)
+  # OpenCL-CLHPP
   FetchContent_Declare(
     OpenCLHeadersCpp
     SYSTEM

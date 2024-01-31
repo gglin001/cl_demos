@@ -8,6 +8,7 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/)
 
 option(WITH_OPENCL_SDK "WITH_OPENCL_SDK" OFF)
+option(WITH_SYSTEM_LIBS "WITH_SYSTEM_LIBS" OFF)
 
 # TODO: add a opencl (cpu)runtime src to build
 
@@ -24,8 +25,6 @@ find_package(OpenCL REQUIRED)
 message("OpenCL_VERSION_STRING: ${OpenCL_VERSION_STRING}")
 message("OpenCL_INCLUDE_DIRS: ${OpenCL_INCLUDE_DIRS}")
 message("OpenCL_LIBRARIES: ${OpenCL_LIBRARIES}")
-
-find_package(spdlog REQUIRED)
 
 find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
 message("Python3_EXECUTABLE: ${Python3_EXECUTABLE}")
