@@ -31,14 +31,3 @@ index 5cfef6b..840666e 100644
  if(ANDROID)
      list(APPEND CLConform_LIBRARIES m)
  endif()
-diff --git a/test_conformance/extensions/CMakeLists.txt b/test_conformance/extensions/CMakeLists.txt
-index 3187174..ba53ee0 100644
---- a/test_conformance/extensions/CMakeLists.txt
-+++ b/test_conformance/extensions/CMakeLists.txt
-@@ -1,5 +1,5 @@
- add_subdirectory( cl_ext_cxx_for_opencl )
--add_subdirectory( cl_khr_command_buffer )
-+# add_subdirectory( cl_khr_command_buffer )
- add_subdirectory( cl_khr_dx9_media_sharing )
- add_subdirectory( cl_khr_semaphore )
- if(VULKAN_IS_SUPPORTED)
