@@ -11,7 +11,10 @@
             // "program": "${command:cmake.getLaunchTargetPath}",
             "program": "${command:cmake.selectLaunchTarget}",
             "args": [],
-            "cwd": "${workspaceFolder}"
+            "cwd": "${workspaceFolder}",
+            "env": {
+                // "OCL_ICD_VENDORS": "/root/micromamba/envs/pyenv/etc/OpenCL/vendors",
+            }
         }
     ]
 }

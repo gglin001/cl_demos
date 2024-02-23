@@ -1,9 +1,12 @@
 {
     "terminal.integrated.env.linux": {
         "EXT_PATH": "${workspaceFolder}/build/bin",
+        // ${env:CONDA_PREFIX}/etc/OpenCL/vendors
+        // "OCL_ICD_VENDORS": "/root/micromamba/envs/pyenv/etc/OpenCL/vendors",
     },
     "terminal.integrated.env.osx": {
         "EXT_PATH": "${workspaceFolder}/build/bin",
+        // "OCL_ICD_VENDORS": "/Users/allen/micromamba/envs/pyenv/etc/OpenCL/vendors",
     },
     "cmake.useCMakePresets": "always",
 }
