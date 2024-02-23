@@ -2,19 +2,20 @@
   "version": 2,
   "configurePresets": [
     {
-      "name": "default",
-      "description": "use opencl from system",
+      "name": "minimum",
+      "description": "minimum build",
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/build",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
         "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/install",
-        "CMAKE_EXPORT_COMPILE_COMMANDS": true
+        "CMAKE_EXPORT_COMPILE_COMMANDS": true,
+        "CMAKE_VERBOSE_MAKEFILE": false
       }
     },
     {
-      "name": "pocl",
-      "description": "using installed pocl runtime",
+      "name": "cts",
+      "description": "enable opencl-cts",
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/build",
       "cacheVariables": {
@@ -22,9 +23,7 @@
         "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/install",
         "CMAKE_RUNTIME_OUTPUT_DIRECTORY": "${sourceDir}/build/bin",
         "CMAKE_EXPORT_COMPILE_COMMANDS": true,
-        // "CMAKE_VERBOSE_MAKEFILE": true,
         "WITH_OPENCL_SDK": true,
-        "WITH_SYSTEM_LIBS": true,
         "WITH_OPENCL_CTS": true
       }
     }

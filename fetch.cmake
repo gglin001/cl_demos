@@ -15,9 +15,7 @@ if(WITH_OPENCL_SDK)
     GIT_SHALLOW TRUE
     OVERRIDE_FIND_PACKAGE)
   FetchContent_MakeAvailable(OpenCLHeaders)
-endif()
 
-if((WITH_OPENCL_SDK) AND (NOT WITH_SYSTEM_LIBS))
   # OpenCLICDLoader
   FetchContent_Declare(
     OpenCLICDLoader
@@ -27,9 +25,7 @@ if((WITH_OPENCL_SDK) AND (NOT WITH_SYSTEM_LIBS))
     GIT_SHALLOW TRUE
     OVERRIDE_FIND_PACKAGE)
   FetchContent_MakeAvailable(OpenCLICDLoader)
-endif()
 
-if(WITH_OPENCL_SDK)
   # OpenCL-CLHPP
   FetchContent_Declare(
     OpenCLHeadersCpp
