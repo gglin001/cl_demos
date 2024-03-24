@@ -23,7 +23,9 @@ else()
   find_package(OpenCL REQUIRED)
 endif()
 
-find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
+find_package(Python3 REQUIRED COMPONENTS Interpreter)
+# Development is optional
+find_package(Python3 COMPONENTS Development)
 message("Python3_EXECUTABLE: ${Python3_EXECUTABLE}")
 message("Python3_INCLUDE_DIRS: ${Python3_INCLUDE_DIRS}")
 message("Python3_LIBRARIES: ${Python3_LIBRARIES}")
