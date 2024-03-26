@@ -8,7 +8,7 @@ micromamba install -y pocl
 
 # config
 # no cts included
-# cmake --preset minimum
+cmake --preset minimum
 # with cts
 cmake --preset cts
 
