@@ -30,7 +30,7 @@ message("Python3_EXECUTABLE: ${Python3_EXECUTABLE}")
 message("Python3_INCLUDE_DIRS: ${Python3_INCLUDE_DIRS}")
 message("Python3_LIBRARIES: ${Python3_LIBRARIES}")
 
-add_subdirectory(enumopencl)
+add_subdirectory(csrc)
 
 if(WITH_OPENCL_CTS)
   # optional patch 0
