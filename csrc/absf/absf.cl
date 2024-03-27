@@ -1,8 +1,9 @@
 kernel void
-absf (__global const float *in,
-      __global float *out)
+absf (global const float *in,
+      global float *out)
 {
-  // printf("absf in cl\n");
-  int gid = get_global_id(0);
-  out[gid] = abs(in[gid]);
+  printf("gid: %d, lid: %d, gid: %d \n",
+    get_global_id(0), get_local_id(0), get_group_id(0));
+  size_t gid = get_global_id(0);
+  out[gid] = in[gid] * -1;
 }

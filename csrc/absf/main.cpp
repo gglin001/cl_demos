@@ -14,27 +14,21 @@
     }                                                                          \
   } while (0)
 
-static const size_t buffer_size = 4 * sizeof(float);
-static const char *kerenel_name = "absf_wrap";
-static const char *program_source = R"(
+const char *kerenel_name = "absf";
+const size_t buffer_size = 4 * sizeof(float);
+const std::vector<float> vec_in = {-1.0f, -2.0f, -3.0f, -4.0f};
+
+const char *program_source = R"(
 kernel void
-absf_wrap (global float *in)
+absf (global const float *in,
+      global float *out)
 {
+  printf("gid: %d, lid: %d, gid: %d \n",
+    get_global_id(0), get_local_id(0), get_group_id(0));
   size_t gid = get_global_id(0);
-  in[gid] = in[gid] * -1;
+  out[gid] = in[gid] * -1;
 }
 )";
-
-// TODO
-// static const char *program_source = R"(
-// kernel void
-// absf_wrap (global const float *in,
-//       global float *out)
-// {
-//   size_t gid = get_global_id(0);
-//   out[gid] = absf(in[gid]);
-// }
-// )";
 
 int main() {
   cl_platform_id platform;
@@ -73,7 +67,7 @@ int main() {
   CHECK_CL_ERRCODE(err);
 
   // Create kernel
-  auto kernel = clCreateKernel(program, "absf_wrap", &err);
+  auto kernel = clCreateKernel(program, kerenel_name, &err);
   CHECK_CL_ERRCODE(err);
 
   // Create command queue
@@ -86,21 +80,20 @@ int main() {
                      buffer_size, nullptr, &err);
   CHECK_CL_ERRCODE(err);
 
-  std::vector<float> vec_in = {-1.0f, -2.0f, -3.0f, -4.0f};
   err = clEnqueueWriteBuffer(queue, buffer_in, CL_TRUE, 0, buffer_size,
                              (const void *)vec_in.data(), 0, nullptr, nullptr);
   CHECK_CL_ERRCODE(err);
 
-  // auto buffer_out =
-  //     clCreateBuffer(context, CL_MEM_WRITE_ONLY | CL_MEM_ALLOC_HOST_PTR,
-  //                    buffer_size, nullptr, &err);
-  // CHECK_CL_ERRCODE(err);
+  auto buffer_out =
+      clCreateBuffer(context, CL_MEM_WRITE_ONLY | CL_MEM_ALLOC_HOST_PTR,
+                     buffer_size, nullptr, &err);
+  CHECK_CL_ERRCODE(err);
 
   // Set kernel arguments
   err = clSetKernelArg(kernel, 0, sizeof(cl_mem), &buffer_in);
   CHECK_CL_ERRCODE(err);
-  // err = clSetKernelArg(kernel, 1, sizeof(cl_mem), &buffer_out);
-  // CHECK_CL_ERRCODE(err);
+  err = clSetKernelArg(kernel, 1, sizeof(cl_mem), &buffer_out);
+  CHECK_CL_ERRCODE(err);
 
   size_t gws = buffer_size / sizeof(cl_float);
   size_t lws = 2;
@@ -114,7 +107,7 @@ int main() {
   CHECK_CL_ERRCODE(err);
 
   // Map the buffer
-  auto ptr = clEnqueueMapBuffer(queue, buffer_in, CL_TRUE, CL_MAP_READ, 0,
+  auto ptr = clEnqueueMapBuffer(queue, buffer_out, CL_TRUE, CL_MAP_READ, 0,
                                 buffer_size, 0, nullptr, nullptr, &err);
   CHECK_CL_ERRCODE(err);
 
@@ -132,13 +125,14 @@ int main() {
   printf("\n");
 
   // Unmap the buffer
-  err = clEnqueueUnmapMemObject(queue, buffer_in, ptr, 0, nullptr, nullptr);
+  err = clEnqueueUnmapMemObject(queue, buffer_out, ptr, 0, nullptr, nullptr);
   CHECK_CL_ERRCODE(err);
   err = clFinish(queue);
   CHECK_CL_ERRCODE(err);
 
   // Cleanup
   clReleaseMemObject(buffer_in);
+  clReleaseMemObject(buffer_out);
   clReleaseCommandQueue(queue);
   clReleaseKernel(kernel);
   clReleaseProgram(program);

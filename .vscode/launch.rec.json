@@ -10,10 +10,18 @@
             "name": "Launch",
             // "program": "${command:cmake.getLaunchTargetPath}",
             "program": "${command:cmake.selectLaunchTarget}",
+            //
+            // "program": "build/bin/test_basic",
+            // "args": [
+            //     "intmath_int",
+            // ],
+            //
             "args": [],
             "cwd": "${workspaceFolder}",
             "env": {
+                "POCL_DEBUG": "all",
                 // "OCL_ICD_VENDORS": "/root/micromamba/envs/pyenv/etc/OpenCL/vendors",
+                // "OCL_ICD_VENDORS": "/Users/allen/micromamba/envs/pyenv/etc/OpenCL/vendors",
             }
         }
     ]
