@@ -14,10 +14,11 @@
     }                                                                          \
   } while (0)
 
-static const size_t buffer_size = 4 * sizeof(float);
-static const char *kerenel_name = "absf";
+const char *kerenel_name = "absf";
+const size_t buffer_size = 4 * sizeof(float);
+const std::vector<float> vec_in = {-1.0f, -2.0f, -3.0f, -4.0f};
 
-static const char *program_source = R"(
+const char *program_source = R"(
 kernel void
 absf (global const float *in,
       global float *out)
@@ -79,7 +80,6 @@ int main() {
                      buffer_size, nullptr, &err);
   CHECK_CL_ERRCODE(err);
 
-  std::vector<float> vec_in = {-1.0f, -2.0f, -3.0f, -4.0f};
   err = clEnqueueWriteBuffer(queue, buffer_in, CL_TRUE, 0, buffer_size,
                              (const void *)vec_in.data(), 0, nullptr, nullptr);
   CHECK_CL_ERRCODE(err);
