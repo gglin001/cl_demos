@@ -1,8 +1,9 @@
 {
     "terminal.integrated.env.linux": {
         "EXT_PATH": "${workspaceFolder}/build/bin",
-        // ${env:CONDA_PREFIX}/etc/OpenCL/vendors
+        // $CONDA_PREFIX/etc/OpenCL/vendors
         // "OCL_ICD_VENDORS": "/root/micromamba/envs/pyenv/etc/OpenCL/vendors",
+        // "POCL_DEBUG": "all",
     },
     "terminal.integrated.env.osx": {
         "EXT_PATH": "${workspaceFolder}/build/bin",
