@@ -10,6 +10,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/)
 # using KhronosGroup/OpenCL-ICD-Loader
 option(WITH_OPENCL_SDK "WITH_OPENCL_SDK, with icd loader" OFF)
 # pocl is built outside, without ocl-icd enabled
+# `POCL_INCLUDE_DIR` && `POCL_LIB_DIR` are needed
 option(WITH_POCL "WITH_POCL, without icd loader" OFF)
 # by default, opencl from system will be used
 
@@ -17,24 +18,28 @@ option(WITH_POCL "WITH_POCL, without icd loader" OFF)
 option(WITH_OPENCL_CTS "WITH_OPENCL_CTS" OFF)
 option(WITH_CLINFO "WITH_CLINFO" OFF)
 
-if (WITH_OPENCL_SDK AND WITH_POCL)
+if(WITH_OPENCL_SDK AND WITH_POCL)
   message(FATAL_ERROR "only one should be enabled")
 endif()
 
 # FetchContent
 include(fetch.cmake)
 
+set(WITH_CLCPP OFF)
+
 if(WITH_OPENCL_SDK)
   find_package(OpenCLHeaders REQUIRED)
   find_package(OpenCLICDLoader REQUIRED)
   find_package(OpenCLHeadersCpp REQUIRED)
   set(OPENCL_LIBS OpenCL::Headers OpenCL::OpenCL OpenCL::HeadersCpp)
+  set(WITH_CLCPP ON)
 elseif(WITH_POCL)
   # TODO: use PkgConfig ?
   # TODO: solve rpath issue
   include_directories(SYSTEM ${POCL_INCLUDE_DIR})
   link_directories(${POCL_LIB_DIR})
   set(OPENCL_LIBS OpenCL)
+  set(WITH_CLCPP ON)
 else()
   find_package(OpenCL REQUIRED)
   set(OPENCL_LIBS OpenCL::OpenCL)
@@ -54,9 +59,17 @@ if(WITH_OPENCL_CTS)
     COMMAND git apply ${CMAKE_SOURCE_DIR}/cts_patch/OpenCL-CTS.patch -q
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/OpenCL-CTS)
 
-  set(CL_INCLUDE_DIR "${openclheaders_SOURCE_DIR}")
-  set(CL_HPP_INCLUDE_DIR "${openclheaderscpp_SOURCE_DIR}")
-  set(OPENCL_LIBRARIES "OpenCL::OpenCL")
+  if(WITH_OPENCL_SDK)
+    set(CL_INCLUDE_DIR "${openclheaders_SOURCE_DIR}")
+    set(CL_HPP_INCLUDE_DIR "${openclheaderscpp_SOURCE_DIR}")
+    set(OPENCL_LIBRARIES "OpenCL::OpenCL")
+  elseif(WITH_POCL)
+    set(CL_INCLUDE_DIR "${POCL_INCLUDE_DIR}")
+    set(CL_HPP_INCLUDE_DIR "${POCL_INCLUDE_DIR}")
+    set(OPENCL_LIBRARIES "OpenCL")
+  else()
+    message(FATAL_ERROR "Unsupported config")
+  endif()
 
   add_subdirectory(OpenCL-CTS)
 endif()
