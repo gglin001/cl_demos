@@ -1,7 +1,15 @@
 set(TARGET_NAME "cl_absf")
 add_executable(${TARGET_NAME} main.c)
 if(WITH_OPENCL_SDK)
-  target_link_libraries(${TARGET_NAME} OpenCL::Headers OpenCL::OpenCL OpenCL::HeadersCpp)
+  target_link_libraries(${TARGET_NAME} OpenCL::Headers OpenCL::OpenCL
+                        OpenCL::HeadersCpp)
 else()
   target_link_libraries(${TARGET_NAME} OpenCL::OpenCL)
+endif()
+
+if(WITH_OPENCL_SDK)
+  set(TARGET_NAME "cl_absfcpp")
+  add_executable(${TARGET_NAME} main.cpp)
+  target_link_libraries(${TARGET_NAME} OpenCL::Headers OpenCL::OpenCL
+                        OpenCL::HeadersCpp)
 endif()
