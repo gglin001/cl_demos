@@ -1,11 +1,11 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 5cfef6b..840666e 100644
+index 5cfef6b..91a927b 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -50,13 +50,13 @@ set(CONFORMANCE_SUFFIX "" )
  #build driver as a dependency of the conformance tests, or other such CMake customization
  include(CMakeVendor.txt OPTIONAL)
- 
+
 -# CL_INCLUDE_DIR - path to dir with OpenCL headers
 -if(CL_INCLUDE_DIR AND CL_LIB_DIR)
 -    link_directories(${CL_LIB_DIR})
@@ -20,14 +20,14 @@ index 5cfef6b..840666e 100644
 +#     message(STATUS "OpenCL hasn't been found!")
 +#     message(FATAL_ERROR "Either install OpenCL or pass -DCL_INCLUDE_DIR and -DCL_LIB_DIR")
 +# endif(CL_INCLUDE_DIR AND CL_LIB_DIR)
- 
+
  # CLConform_GL_LIBRARIES_DIR - path to OpenGL libraries
  if(GL_IS_SUPPORTED AND CLConform_GL_LIBRARIES_DIR)
-@@ -163,6 +163,7 @@ if(WIN32 AND ${CLConform_TARGET_ARCH} STREQUAL "x86")
- endif()
- 
- list(APPEND CLConform_LIBRARIES ${OPENCL_LIBRARIES})
-+list(APPEND CLConform_LIBRARIES OpenCL::OpenCL)
- if(ANDROID)
-     list(APPEND CLConform_LIBRARIES m)
- endif()
+@@ -185,6 +185,7 @@ if(APPLE)
+ endif(APPLE)
+
+ include_directories(SYSTEM ${CL_INCLUDE_DIR})
++include_directories(SYSTEM ${CL_HPP_INCLUDE_DIR})
+ include_directories(${CLConform_SOURCE_DIR}/test_common/harness
+                     ${CLConform_SOURCE_DIR}/test_common/gles
+                     ${CLConform_SOURCE_DIR}/test_common/gl

@@ -1,0 +1,5 @@
+if(WITH_CLCPP)
+  set(TARGET_NAME "cl_simple")
+  add_executable(${TARGET_NAME} main.cpp)
+  target_link_libraries(${TARGET_NAME} ${OPENCL_LIBS})
+endif()

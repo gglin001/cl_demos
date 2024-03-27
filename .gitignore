@@ -4,3 +4,6 @@ build/
 
 *.code-workspace
 .DS_Store
+
+CMakeUserPresets.json
+core

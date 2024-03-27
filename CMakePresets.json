@@ -10,19 +10,33 @@
         "CMAKE_BUILD_TYPE": "Debug",
         "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/install",
         "CMAKE_EXPORT_COMPILE_COMMANDS": true,
+        // "CMAKE_C_COMPILER": "/usr/bin/clang",
+        // "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
         "CMAKE_VERBOSE_MAKEFILE": false
+      }
+    },
+    {
+      "name": "sdk",
+      "description": "enable opencl-sdk",
+      "inherits": "minimum",
+      "cacheVariables": {
+        "WITH_OPENCL_SDK": true
+      }
+    },
+    {
+      "name": "pocl",
+      "inherits": "minimum",
+      "cacheVariables": {
+        "WITH_POCL": true,
+        "POCL_INCLUDE_DIR": "/opt/pocl/include",
+        "POCL_LIB_DIR": "opt/pocl/lib"
       }
     },
     {
       "name": "cts",
       "description": "enable opencl-cts",
-      "generator": "Ninja",
-      "binaryDir": "${sourceDir}/build",
+      "inherits": "sdk",
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Debug",
-        "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/install",
-        "CMAKE_RUNTIME_OUTPUT_DIRECTORY": "${sourceDir}/build/bin",
-        "CMAKE_EXPORT_COMPILE_COMMANDS": true,
         "WITH_OPENCL_SDK": true,
         "WITH_OPENCL_CTS": true
       }

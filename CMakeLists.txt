@@ -7,20 +7,42 @@ set(CMAKE_CXX_EXTENSIONS ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/)
 
-option(WITH_OPENCL_SDK "WITH_OPENCL_SDK" OFF)
-option(WITH_OPENCL_CTS "WITH_OPENCL_CTS" OFF)
+# using KhronosGroup/OpenCL-ICD-Loader
+option(WITH_OPENCL_SDK "WITH_OPENCL_SDK, with icd loader" OFF)
+# pocl is built outside, without ocl-icd enabled
+# `POCL_INCLUDE_DIR` && `POCL_LIB_DIR` are needed
+option(WITH_POCL "WITH_POCL, without icd loader" OFF)
+# by default, opencl from system will be used
 
-# TODO: add a opencl (cpu)runtime src to build
+# need git submodules
+option(WITH_OPENCL_CTS "WITH_OPENCL_CTS" OFF)
+option(WITH_CLINFO "WITH_CLINFO" OFF)
+
+if(WITH_OPENCL_SDK AND WITH_POCL)
+  message(FATAL_ERROR "only one should be enabled")
+endif()
 
 # FetchContent
 include(fetch.cmake)
+
+set(WITH_CLCPP OFF)
 
 if(WITH_OPENCL_SDK)
   find_package(OpenCLHeaders REQUIRED)
   find_package(OpenCLICDLoader REQUIRED)
   find_package(OpenCLHeadersCpp REQUIRED)
+  set(OPENCL_LIBS OpenCL::Headers OpenCL::OpenCL OpenCL::HeadersCpp)
+  set(WITH_CLCPP ON)
+elseif(WITH_POCL)
+  # TODO: use PkgConfig ?
+  # TODO: solve rpath issue
+  include_directories(SYSTEM ${POCL_INCLUDE_DIR})
+  link_directories(${POCL_LIB_DIR})
+  set(OPENCL_LIBS OpenCL)
+  set(WITH_CLCPP ON)
 else()
   find_package(OpenCL REQUIRED)
+  set(OPENCL_LIBS OpenCL::OpenCL)
 endif()
 
 find_package(Python3 REQUIRED COMPONENTS Interpreter)
@@ -30,24 +52,29 @@ message("Python3_EXECUTABLE: ${Python3_EXECUTABLE}")
 message("Python3_INCLUDE_DIRS: ${Python3_INCLUDE_DIRS}")
 message("Python3_LIBRARIES: ${Python3_LIBRARIES}")
 
-add_subdirectory(enumopencl)
+add_subdirectory(csrc)
 
 if(WITH_OPENCL_CTS)
-  # optional patch 0
-  # execute_process(
-  #   COMMAND git apply ${CMAKE_SOURCE_DIR}/cts_patch/OpenCL-CTS.patch -q
-  #   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/OpenCL-CTS)
+  execute_process(
+    COMMAND git apply ${CMAKE_SOURCE_DIR}/cts_patch/OpenCL-CTS.patch -q
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/OpenCL-CTS)
 
-  # CL_INCLUDE_DIR
-  set(CL_INCLUDE_DIR "${openclheaders_BINARY_DIR}")
-  message("CL_INCLUDE_DIR: ${CL_INCLUDE_DIR}")
+  if(WITH_OPENCL_SDK)
+    set(CL_INCLUDE_DIR "${openclheaders_SOURCE_DIR}")
+    set(CL_HPP_INCLUDE_DIR "${openclheaderscpp_SOURCE_DIR}")
+    set(OPENCL_LIBRARIES "OpenCL::OpenCL")
+  elseif(WITH_POCL)
+    set(CL_INCLUDE_DIR "${POCL_INCLUDE_DIR}")
+    set(CL_HPP_INCLUDE_DIR "${POCL_INCLUDE_DIR}")
+    set(OPENCL_LIBRARIES "OpenCL")
+  else()
+    message(FATAL_ERROR "Unsupported config")
+  endif()
 
-  # CL_LIB_DIR
-  # optional patch 1
-  set(CL_LIB_DIR "${openclicdloader_BINARY_DIR}")
-  set(OPENCL_LIBRARIES "OpenCL")
-  message("CL_LIB_DIR: ${CL_LIB_DIR}")
-
-  # OpenCL-CTS
   add_subdirectory(OpenCL-CTS)
+endif()
+
+if(WITH_CLINFO)
+  add_executable(cl_clinfo clinfo/src/clinfo.c)
+  target_link_libraries(cl_clinfo ${OPENCL_LIBS})
 endif()

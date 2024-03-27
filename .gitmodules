@@ -1,3 +1,6 @@
 [submodule "OpenCL-CTS"]
 	path = OpenCL-CTS
 	url = https://github.com/KhronosGroup/OpenCL-CTS.git
+[submodule "clinfo"]
+	path = clinfo
+	url = https://github.com/Oblomov/clinfo.git
