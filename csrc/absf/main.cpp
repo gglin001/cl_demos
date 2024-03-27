@@ -16,25 +16,25 @@
 
 static const size_t buffer_size = 4 * sizeof(float);
 static const char *kerenel_name = "absf_wrap";
-static const char *program_source = R"(
-kernel void
-absf_wrap (global float *in)
-{
-  size_t gid = get_global_id(0);
-  in[gid] = in[gid] * -1;
-}
-)";
 
-// TODO
 // static const char *program_source = R"(
 // kernel void
-// absf_wrap (global const float *in,
-//       global float *out)
+// absf_wrap (global float *in)
 // {
 //   size_t gid = get_global_id(0);
-//   out[gid] = absf(in[gid]);
+//   in[gid] = in[gid] * -1;
 // }
 // )";
+
+static const char *program_source = R"(
+kernel void
+absf_wrap (global const float *in,
+      global float *out)
+{
+  size_t gid = get_global_id(0);
+  out[gid] = in[gid] * -1;
+}
+)";
 
 int main() {
   cl_platform_id platform;
