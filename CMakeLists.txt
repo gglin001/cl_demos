@@ -7,13 +7,19 @@ set(CMAKE_CXX_EXTENSIONS ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/)
 
+# using KhronosGroup/OpenCL-ICD-Loader
 option(WITH_OPENCL_SDK "WITH_OPENCL_SDK, with icd loader" OFF)
+# pocl is built outside, without ocl-icd enabled
 option(WITH_POCL "WITH_POCL, without icd loader" OFF)
+# by default, opencl from system will be used
 
+# need git submodules
 option(WITH_OPENCL_CTS "WITH_OPENCL_CTS" OFF)
 option(WITH_CLINFO "WITH_CLINFO" OFF)
 
-# TODO: add a opencl (cpu)runtime src to build
+if (WITH_OPENCL_SDK AND WITH_POCL)
+  message(ERROR "only one should be enabled")
+endif()
 
 # FetchContent
 include(fetch.cmake)
@@ -24,8 +30,11 @@ if(WITH_OPENCL_SDK)
   find_package(OpenCLHeadersCpp REQUIRED)
   set(OPENCL_LIBS OpenCL::Headers OpenCL::OpenCL OpenCL::HeadersCpp)
 elseif(WITH_POCL)
-  find_package(PkgConfig REQUIRED)
-  pkg_check_modules(OpenCL IMPORTED_TARGET)
+  # TODO: use PkgConfig ?
+  # TODO: solve rpath issue
+  include_directories(SYSTEM ${POCL_INCLUDE_DIR})
+  link_directories(${POCL_LIB_DIR})
+  set(OPENCL_LIBS OpenCL)
 else()
   find_package(OpenCL REQUIRED)
   set(OPENCL_LIBS OpenCL::OpenCL)
