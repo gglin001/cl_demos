@@ -9,6 +9,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/)
 
 option(WITH_OPENCL_SDK "WITH_OPENCL_SDK" OFF)
 option(WITH_OPENCL_CTS "WITH_OPENCL_CTS" OFF)
+option(WITH_CLINFO "WITH_CLINFO" OFF)
 
 # TODO: add a opencl (cpu)runtime src to build
 
@@ -42,4 +43,14 @@ if(WITH_OPENCL_CTS)
   set(OPENCL_LIBRARIES "OpenCL::OpenCL")
 
   add_subdirectory(OpenCL-CTS)
+endif()
+
+if(WITH_CLINFO)
+  add_executable(cl_clinfo clinfo/src/clinfo.c)
+  if(WITH_OPENCL_SDK)
+    target_link_libraries(cl_clinfo OpenCL::Headers OpenCL::OpenCL
+                          OpenCL::HeadersCpp)
+  else()
+    target_link_libraries(cl_clinfo OpenCL::OpenCL)
+  endif()
 endif()
