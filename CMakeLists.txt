@@ -18,7 +18,7 @@ option(WITH_OPENCL_CTS "WITH_OPENCL_CTS" OFF)
 option(WITH_CLINFO "WITH_CLINFO" OFF)
 
 if (WITH_OPENCL_SDK AND WITH_POCL)
-  message(ERROR "only one should be enabled")
+  message(FATAL_ERROR "only one should be enabled")
 endif()
 
 # FetchContent

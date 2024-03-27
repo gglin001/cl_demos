@@ -24,6 +24,15 @@
       }
     },
     {
+      "name": "pocl",
+      "inherits": "minimum",
+      "cacheVariables": {
+        "WITH_POCL": true,
+        "POCL_INCLUDE_DIR": "/opt/pocl/include",
+        "POCL_LIB_DIR": "opt/pocl/lib"
+      }
+    },
+    {
       "name": "cts",
       "description": "enable opencl-cts",
       "inherits": "sdk",
