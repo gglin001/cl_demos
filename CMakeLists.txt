@@ -33,21 +33,13 @@ message("Python3_LIBRARIES: ${Python3_LIBRARIES}")
 add_subdirectory(csrc)
 
 if(WITH_OPENCL_CTS)
-  # optional patch 0
-  # execute_process(
-  #   COMMAND git apply ${CMAKE_SOURCE_DIR}/cts_patch/OpenCL-CTS.patch -q
-  #   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/OpenCL-CTS)
+  execute_process(
+    COMMAND git apply ${CMAKE_SOURCE_DIR}/cts_patch/OpenCL-CTS.patch -q
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/OpenCL-CTS)
 
-  # CL_INCLUDE_DIR
-  set(CL_INCLUDE_DIR "${openclheaders_BINARY_DIR}")
-  message("CL_INCLUDE_DIR: ${CL_INCLUDE_DIR}")
+  set(CL_INCLUDE_DIR "${openclheaders_SOURCE_DIR}")
+  set(CL_HPP_INCLUDE_DIR "${openclheaderscpp_SOURCE_DIR}")
+  set(OPENCL_LIBRARIES "OpenCL::OpenCL")
 
-  # CL_LIB_DIR
-  # optional patch 1
-  set(CL_LIB_DIR "${openclicdloader_BINARY_DIR}")
-  set(OPENCL_LIBRARIES "OpenCL")
-  message("CL_LIB_DIR: ${CL_LIB_DIR}")
-
-  # OpenCL-CTS
   add_subdirectory(OpenCL-CTS)
 endif()
