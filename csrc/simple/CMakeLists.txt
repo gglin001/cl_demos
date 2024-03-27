@@ -1,0 +1,5 @@
+if(WITH_OPENCL_SDK)
+  set(TARGET_NAME "cl_simple")
+  add_executable(${TARGET_NAME} main.cpp)
+  target_link_libraries(${TARGET_NAME} OpenCL::Headers OpenCL::OpenCL OpenCL::HeadersCpp)
+endif()
